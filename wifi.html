@@ -1,0 +1,171 @@
+﻿<DOCTYPE html>
+<html>
+
+<head>
+  <title>Hot Water VOLNA2.0</title>
+  <link rel="stylesheet" type="text/css" href="hw.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="144x144" href="favicon-144x144.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="favicon.ico">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#001b4c">
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+</head>
+
+<body>
+	<ul>
+    <li><a href="./index.html">Главная</a></li>
+    <li><a href="./control.html">Управление независимыми контурами</a></li>
+    <li><a href="./hw.html">ГВС</a></li>
+    <li><a href="./hand.html">Сервисное меню</a></li>
+    <li><a href="./edit.html">Обновление файлов</a></li>
+    <li><a href="./update">Обновление прошивки</a></li>
+    <li><a href="./settings.json">Основные параметры</a></li>
+    <li><a class="active" href="./wifi.html">WIFI параметры</a></li>
+</ul>
+  <section class="control">
+  	<div class="block" style="width:100%;height:33%;">
+  		<header class="header">
+  		<div class="title_name">WIFI настройки</div>
+  		</header>
+  		<div class="main_control" style="height:33%">
+  		 <div class="simple">Имя точки доступа:<br><input type="text" id="ssid"></div><br>
+       <div class="simple">Пароль:<br><input type="text" id="pass"></div><br>
+       <button id="Save_Btn" class="button" onclick="Save_Sett();" tabindex="6">Сохранить</button>
+  		 </div>
+  	</div>
+  </section>
+
+  <section class="control">
+  	<div class="block" style="width:100%">
+  		<header class="header">
+  		<div class="title_name">Настройки сервера</div>
+  		</header>
+  		<div class="main_control"  style="height:66%">
+  		 <div class="simple">Адрес сервера:<br><input type="text" id="srvAddr"></div><br>
+       <button id="1Btn" class="button" onclick="Apply(1);" tabindex="1">Применить</button>
+       <div class="simple">Имя пользователя:<br><input type="text" id="userName"></div><br>
+       <button id="2Btn" class="button" onclick="Apply(2);" tabindex="2">Применить</button>
+       <div class="simple">id:<br><input type="text" id="devId"></div><br>
+       <button id="3Btn" class="button" onclick="Apply(3);" tabindex="3">Применить</button>
+       <div class="simple">Пароль устройства:<br><input type="text" id="devPass"></div><br>
+       <button id="4Btn" class="button" onclick="Apply(4);" tabindex="4">Применить</button>
+       <button id="5Btn" class="button" onclick="Apply(5);" tabindex="5">Перезагрузить устройство</button>
+  		 </div>
+  	</div>
+  </section>
+
+  <script>
+    var rSettings;
+    var sSettings;
+    var vl = document;
+    var connection = new WebSocket('ws://' + location.hostname + ':81/', ['arduino']);
+    connection.onopen = function () {
+        connection.send('Connect ' + new Date());
+    };
+    connection.onerror = function (error) {
+        console.log('WebSocket Error ', error);
+    };
+    connection.onmessage = function (e) {
+        console.log('Server: ', e.data);
+      };
+    connection.onclose = function () {
+          console.log('WebSocket connection closed');
+          connection = new WebSocket('ws://' + location.hostname + ':81/', ['arduino']);
+      };
+    vl.onload = hel();
+// Базовая функция при старте
+    function hel() {
+
+      var requestURL = '/wifi.json';
+      var request = new XMLHttpRequest();
+      request.open('GET', requestURL);
+      request.responseType = 'json';
+      request.send();
+      request.onload = function () {
+        rSettings = request.response;
+        	vl.getElementById("ssid").value = rSettings.ssid;
+        	vl.getElementById("pass").value = rSettings.pass;
+      };
+      var requestURL1 = '/server.json';
+  		var request1 = new XMLHttpRequest();
+  		request1.open('GET', requestURL1);
+  		request1.responseType = 'json';
+  		request1.send();
+  		request1.onload = function () {
+  			sSettings = request1.response;
+        vl.getElementById("srvAddr").value = sSettings.sserv;
+        vl.getElementById("userName").value = sSettings.suser;
+        vl.getElementById("devId").value = sSettings.sid;
+        vl.getElementById("devPass").value = sSettings.spass;
+    };
+
+
+  }
+
+//Save Settings//
+
+	function Save_Sett(){
+    rSettings.ssid = vl.getElementById("ssid").value;
+		rSettings.pass = vl.getElementById("pass").value;
+		console.log("SSID:" + rSettings.ssid + "; pass:" + rSettings.pass);
+		    var strJ = rSettings;
+      	var strD = JSON.stringify(strJ);
+      	var fData = new FormData();
+      	var myBlob = new Blob([strD], {
+        	type: "plain/text"
+      	});
+      	fData.append("file", myBlob, "wifi.json");
+      	var oReq = new XMLHttpRequest();
+      	oReq.open("POST", "/edit.html", true);
+      	oReq.onreadystatechange = function () {
+		}
+      	oReq.send(fData);
+	}
+
+  function Apply(num){
+    var sstring = "";
+    switch (num){
+      case 1:
+        sstring = "&serverSet=" + vl.getElementById("srvAddr").value;
+        sSettings.sserv = vl.getElementById("srvAddr").value;
+        break;
+      case 2:
+        sstring = "&userNameSet=" + vl.getElementById("userName").value;
+        sSettings.suser = vl.getElementById("userName").value;
+        break;
+      case 3:
+        sstring = "&idSet=" + vl.getElementById("devId").value;
+        sSettings.sid = vl.getElementById("devId").value;
+        break;
+      case 4:
+        sstring = "&passwSet=" + vl.getElementById("devPass").value;
+        sSettings.spass = vl.getElementById("devPass").value;
+        break;
+      case 5:
+        sstring = "&reboot=1";
+        break;
+      default:
+        break;
+  }
+  connection.send(sstring);
+  console.log(sstring);
+  if (num != 5) {
+    var strJ = sSettings;
+    var strD = JSON.stringify(strJ);
+    var fData = new FormData();
+    var myBlob = new Blob([strD], {
+      type: "plain/text"
+    });
+    fData.append("file", myBlob, "server.json");
+    var oReq = new XMLHttpRequest();
+    oReq.open("POST", "/edit.html", true);
+    oReq.onreadystatechange = function () {}
+    oReq.send(fData);
+  }
+  }
+
+  </script>
+</body>
+</html>

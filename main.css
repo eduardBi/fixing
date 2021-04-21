@@ -1,0 +1,588 @@
+﻿/* The container flat */
+.container-f {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container-f input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark-f {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.container-f:hover input ~ .checkmark-f {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container-f input:checked ~ .checkmark-f {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark-f:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container-f input:checked ~ .checkmark-f:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container-f .checkmark-f:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* The container rounded*/
+.container-r {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 12px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.container-r input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark-r {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.container-r:hover input ~ .checkmark-r {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.container-r input:checked ~ .checkmark-r {
+  background-color: #2196F3;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark-r:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.container-r input:checked ~ .checkmark-r:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.container-r .checkmark-r:after {
+ 	top: 9px;
+	left: 9px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: white;
+}
+
+
+
+/* Navigation bar */
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #223;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #112;
+}
+
+.active {
+  background-color: rgba(0, 30, 50, .8);
+}
+.control {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.control > section {
+  width: 100%;
+  margin: 5px;
+  text-align: center;
+  font-size: 15px;
+  justify-content: center;
+}
+
+section>div:hover {
+    background-color: rgba(210, 240, 240, 0.4);
+}
+
+section>div>header {
+    background-color: rgba(0, 30, 50, 0.8);
+    color: white;
+    padding: 6px;
+    font-family: 'Roboto', sans-serif;
+    position: relative;
+	border: none;
+	border-radius: 5px;
+}
+
+h1 {
+    margin: 0px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 32;
+    text-align:  center;
+}
+
+section>div {
+	background-color: rgba(250, 250, 250, 0.4);
+    padding: 5px 5px 5px 5px;
+}
+
+.block{
+	width: 300px;
+	height: 300px;
+	border-radius: 10px;
+}
+
+.block.hover{
+}
+
+div.wrapper {
+width:100%;
+height:45px;
+}
+div.left_block {
+float:left;
+width:56%;
+height:45px;
+}
+div.right_block {
+float:right;
+width:43%;
+height:45px;
+}
+
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(20px);
+  -ms-transform: translateX(20px);
+  transform: translateX(20px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 20px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+
+.menu {
+  float:left;
+  width:50%;
+  text-align:left;
+  padding: 5px;
+}
+
+.main {
+  float:left;
+  width:20%;
+  text-align:center;
+  padding: 5px;
+}
+.right {
+  float:left;
+  width:20%;
+  text-align:center;
+  padding: 5px;
+  }
+.rounded {
+	border: none;
+	border-radius: 5px;
+	text-align:center;
+	width:80%;
+}
+
+.flex-container {
+    display: flex;
+
+    flex-wrap: wrap;
+}
+
+.flex-container > section {
+    font-size: 15px;
+    width: 420px;
+    margin: 5px;
+    text-align: center;
+    justify-content: center;
+    
+    padding: 0px;
+	height:100%;
+    border-radius: 15px 15px 15px 15px;
+    background-color: rgba(250, 250, 250, .4);
+
+}
+
+.flex-container > section:hover {
+    border-radius: 15px 15px 15px 15px;
+    background-color: rgba(210, 240, 240, .4);
+}
+section > header {
+    font-family: 'Roboto', sans-serif;
+
+    position: relative;
+
+    padding: 6px;
+
+    color: white;
+    border: none;
+    border-radius: 15px 15px 0 0;
+    background-color: rgba(0, 30, 50, .8);
+}
+
+section > footer {
+	padding:5px;
+	justify-content: center;
+	display: flex;
+    flex-wrap: wrap;
+}
+
+h1 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 32;
+
+    margin: 0;
+}
+
+.button {
+    font-size: 16px;
+
+    display: inline-block;
+
+    margin: 12px 3px 12px 3px;
+    padding: 6px 24px;
+
+    cursor: pointer;
+    text-decoration: none;
+
+    color: white;
+    border: none;
+    border-radius: 3px 15px 3px 15px;
+    outline: none;
+    background-color: #f19b06;
+    box-shadow: 1px 1px 6px #555;
+}
+
+
+.button:hover {
+    background-color: #188;
+    box-shadow: 1px 1px 3px #444;
+}
+
+input[type=range] {
+    width: 90%;
+    margin: 5px;
+
+    border-radius: 10px;
+    outline: none;
+
+    -webkit-appearance: none;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+    margin-top: 0;
+
+    border: 0;
+    border-radius: 10px 10px 10px 10px;
+
+    -webkit-appearance: none;
+}
+
+input.disabled[type=range]::-webkit-slider-thumb {
+    background: #999;
+}
+
+input.enabled[type=range]::-webkit-slider-thumb {
+    cursor: pointer;
+
+    background: #099;
+    /*box-shadow: 1px 1px 2px #777, 0px 0px 1px #777;*/
+}
+
+.sli[type=range]::-webkit-slider-runnable-track{
+  width: 20px ;
+  height: 20px;
+  border-radius: 50%;
+  background: red;
+  cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: inherit;
+    height: 20px;
+
+    border-radius: 10px;
+    background: #eee;
+}
+
+input.enabled[type=range]::-webkit-slider-runnable-track {
+    cursor: pointer;
+}
+
+@media screen and (min-width: 781px) {
+    .flex-container > section {
+        width: 32%;
+        height:100%;
+    }
+}
+
+@media screen and (max-width: 780px) {
+    .flex-container > section {
+        width: 48%;
+    }
+    ul li {float: none;}
+}
+@media (max-width: 480px) {
+    .flex-container > section {
+        width: 100%;
+    }
+    ul li {float: none;}
+}
+
+body {
+    font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+	margin: 0px;
+    background: radial-gradient(ellipse at bottom, #3094a2 0%, #6453a9 100%) no-repeat fixed;
+    background-size: cover;
+}
+
+#title {
+    font-family: 'lato', sans-serif;
+    font-size: 50px;
+    font-weight: 200;
+
+    position: absolute;
+    top: 50%;
+    right: 0;
+    left: 0;
+
+    margin-top: -60px;
+    padding-left: 10px;
+
+    text-align: center;
+    letter-spacing: 10px;
+
+    color: #fff;
+}
+#title span {
+    background: -webkit-linear-gradient(white, #38495a);
+    -webkit-background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+}
+
+#d0 {
+    font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+#d0 td,
+#d0 th {
+    padding: 1px;
+
+    border: 1px solid #ddd;
+}
+
+#d0 tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+#d0 tr:nth-child(odd) {
+    background-color: #d2d2d2;
+}
+
+#d0 tr:hover {
+    background-color: #ddd;
+}
+
+#d0 th {
+    padding-top: 2px;
+    padding-bottom: 2px;
+
+    text-align: center;
+
+    color: white;
+    background-color: #199;
+}
+
+#ts {
+    padding: 0 12px 12px 12px;
+}
+
+.rGauge {
+    width: 200px;
+    height: 145px;
+}
+
+.rGauge-base {
+    stroke: #edebeb;
+    fill: none;
+}
+
+.rGauge-progress {
+    fill: none;
+}
+
+.rGauge-val {
+    font-size: 1.3em;
+    font-weight: 700;
+}
+
+.rGauge-min-val,
+.rGauge-max-val {
+    fill: #2e261c;
+}
+
+.vGauge {
+    width: 145px;
+    height: 145px;
+}
+
+.vGauge-base {
+    fill: #edebeb;
+}
+
+
+
+.vGauge-val {
+    font-size: 1.3em;
+    font-weight: 700;
+}
+
+.vGauge-min-val,
+.vGauge-max-val {
+    fill: #231c2e;
+}
+
+.gauge-section {
+    border: 0;
+    border-radius: 10px 10px 10px 10px;
+    background-color: rgba(0, 30, 50, .2);
+    margin: 2px;
+    padding: 2px;
+}

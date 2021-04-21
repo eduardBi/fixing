@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>VOLNA2.0</title>
+  <link rel="stylesheet" type="text/css" href="main.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="144x144" href="favicon-144x144.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="favicon.ico">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#001b4c">
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+</head>
+
+<body>
+
+<ul>
+  <li><a class="active" href="./index.html">Главная</a></li>
+  <li><a href="./control.html">Управление независимыми контурами</a></li>
+  <li><a href="./hw.html">ГВС</a></li>
+  <li><a href="./hand.html">Сервисное меню</a></li>
+</ul>
+<input class="sli" id="1" type="range" min="-50" max="105" step="1" value="43" oninput="console.log(document.querySelector('input').value)"><br>
+  <section class="flex-container">
+    
+    <section>
+      <header>
+        <h1>Текущие параметры</h1>
+      </header>
+      <footer id="tp">
+        <div class="gauge-section">
+          <b>Температура подачи,°C</b>
+          <div id="t1cvalg" class="gauge"></div>
+        </div>
+        <div class="gauge-section">
+          <b>Температура обратки,°C</b>
+          <div id="t2cvalg" class="gauge"></div>
+        </div>
+        <div class="gauge-section">
+          <b>Температура на улице,°C</b>
+          <div id="t3cvalg" class="gauge"></div>
+        </div>
+
+        <div class="menu">Температура комфорта:</div>
+        <div class="main"><input type="number" class="rounded" value="0" id="t0val" readonly onclick="somePrompt(0);"></div>
+        <div class="right"><sup>o</sup>C</div>
+
+      </footer>
+    </section>
+
+    <section>
+      <header>
+        <h1>Недельное расписание</h1>
+      </header>
+      <footer id="ts">
+        <table id="d0"></table>
+      </footer>
+    </section>
+
+    <section>
+      <header>
+        <h1>Температурный график</h1>
+      </header>
+      <footer id="tg">
+        <div class="simple">t<sub>11</sub>:<span id="t1val">43</span><sup>o</sup>C</div>
+        <input class="enabled" id="1" type="range" min="-50" max="105" step="1" value="43" oninput="sliMove(1);"><br>
+        <div class="simple">t<sub>21</sub>:<span id="t2val">37</span><sup>o</sup>C</div>
+        <input class="enabled" id="2" type="range" min="-50" max="105" step="1" value="37" oninput="sliMove(2);"><br>
+        <div class="simple">t<sub>31</sub>:<span id="t3val">8</span><sup>o</sup>C</div>
+        <input class="enabled" id="3" type="range" min="-50" max="105" step="1" value="8" oninput="sliMove(3);"><br>
+        <div class="simple">t<sub>12</sub>:<span id="t4val">90</span><sup>o</sup>C</div>
+        <input class="enabled" id="4" type="range" min="-50" max="105" step="1" value="90" oninput="sliMove(4);"><br>
+        <div class="simple">t<sub>22</sub>:<span id="t5val">70</span><sup>o</sup>C</div>
+        <input class="enabled" id="5" type="range" min="-50" max="105" step="1" value="70" oninput="sliMove(5);"><br>
+        <div class="simple">t<sub>32</sub>:<span id="t6val">-35</span><sup>o</sup>C</div>
+        <input class="enabled" id="6" type="range" min="-50" max="105" step="1" value="-35" oninput="sliMove(6);"><br>
+
+        <div class="wrapper">
+			<div class="left_block"><button id="resttemprs" class="button" onclick="defaultT();">Вернуть к заводским</button></div>
+			<div class="right_block"><button id="timetable" class="button" onclick="saveSett();">Применить</button></div>
+		</div>
+
+
+      </footer>
+    </section>
+
+  </section>
+
+  <script>
+    var connection = new WebSocket('ws://' + location.hostname + ':81/', ['arduino']);
+      connection.onopen = function () {
+        connection.send('Connect ' + new Date());
+      };
+      connection.onerror = function (error) {
+        console.log('WebSocket Error ', error);
+      };
+      connection.onmessage = function (e) {
+        console.log('Server: ', e.data);
+        var ejson = JSON.parse(e.data);
+        tempGauge1.setVal(ejson.t1c).setColor(getTempColor(ejson.t1c));
+        tempGauge2.setVal(ejson.t2c).setColor(getTempColor(ejson.t2c));
+        tempGauge3.setVal(ejson.t3c).setColor(getTempColor(ejson.t3c));
+      };
+      connection.onclose = function () {
+        console.log('WebSocket connection closed');
+      };
+// Выбор цвета индикаторов в зависимости от температур
+    function getTempColor(t) {
+      if (t > 50.0) {
+        return '#ff6600';
+      } else if (t > 23.0) {
+        return '#F34E38';
+      } else
+        return '#008080';
+    }
+
+    var rSettings;
+    var vl = document;
+    var tempGauge3 = createRadGauge('t3cvalg', -50, 125, ' ').setVal(-35).setColor(0);
+    var tempGauge1 = createRadGauge('t1cvalg', -50, 125, ' ').setVal(95).setColor(0);
+    var tempGauge2 = createRadGauge('t2cvalg', -50, 125, ' ').setVal(70).setColor(0);
+
+    vl.onload = hel();
+
+// Базовая функция при старте
+    function hel() {
+
+      var requestURL = '/settings.json';
+      var request = new XMLHttpRequest();
+      request.open('GET', requestURL);
+      request.responseType = 'json';
+      request.send();
+      request.onload = function () {
+        rSettings = request.response;
+        readSettings();
+
+        var k = 1;
+        for (; k < 7; k++) {
+          vl.getElementById("t" + k + "val").innerHTML = rSettings.tempset[k];
+          vl.getElementById(k).value = rSettings.tempset[k];
+        }
+        vl.getElementById("t0val").value = rSettings.tempset[0];
+      }
+
+
+    }
+
+// Функция работы слайдера установки графика температур
+    function sliMove(i) {
+      vl.getElementById("t" + i + "val").innerHTML = vl.getElementById(i).value;
+      rSettings.tempset[i] = Number(vl.getElementById(i).value);
+    }
+
+// Функция возврата к заводским настройкам
+    function defaultT() {
+      var tArr = [22, 43, 37, 8, 90, 70, -35];
+      var k = 1;
+      for (; k < 7; k++) {
+        rSettings.tempset[k] = Number(tArr[k]);
+      }
+      saveSett();
+    }
+// Функция отправки команд к контроллеру
+    function commandSend() {
+      var localText;
+      localText = vl.getElementById("commandSendText").value;
+      connection.send(localText);
+      console.log(localText);
+    }
+    function anyCommandSend(tText) {
+      connection.send(tText);
+      console.log(tText);
+    }
+// Функция первоначального заполнения документа
+    function readSettings() {
+      var i = 0;
+      var j = "";
+      if(rSettings.elParam[10] == 3){
+        var tmp = "<tr><th></th><th></th><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr>";
+        for (; i < 24; i++) {
+          if ( i % 2 == 0) {
+            j = "Час";
+          }else{
+            j = "t, <sup>o</sup>C";
+          }
+          if(i%4 == 0){
+              var l = i/4 + 1;
+              tmp += "<tr><td rowspan=\"4\">Контур " + l + "</td><td>" + j + "</td>";
+          } else{
+              tmp += "<tr><td>" + j + "</td>";
+          }
+          var k = 0;
+          for (; k < 7; k++) {
+            tmp += "<td id=\"tab" + i + k + "\" onclick=\"tablePrompt(" + i + "," + k + ")\">" + rSettings.timetable[i][k] +
+              "</td>";
+          }
+
+        }
+      } else{
+      var tmp = "<tr><th>Время</th><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr>";
+      for (; i < 24; i++) {
+        tmp += "<tr><td>" + i + ":00 </td>";
+        var k = 0;
+        for (; k < 7; k++) {
+          tmp += "<td id=\"tab" + i + k + "\" onclick=\"tablePrompt(" + i + "," + k + ")\">" + rSettings.timetable[i][k] +
+            "</td>";
+        }
+
+      }
+      }
+      tmp += "</tr>";
+      vl.getElementById("d0").innerHTML = tmp;
+      vl.getElementById("t0val").innerHTML = rSettings.tempset[0];
+    }
+
+// Функция ввода данных в расписание
+    function tablePrompt(i, k) {
+      var dWeek = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+      var prText = prompt(dWeek[k] + ", " + i + ":00", rSettings.timetable[i][k]);
+      if (prText > 0) {
+        vl.getElementById("tab" + i + k).innerHTML = prText;
+        rSettings.timetable[i][k] = Number(prText);
+      }
+    }
+
+// Функция ввода данных в отдельные элементы по клику
+    function somePrompt(i) {
+      var prText = prompt(vl.getElementById("t" + i + "val").innerHTML, rSettings.tempset[i]);
+        vl.getElementById("t" + i + "val").innerHTML = prText;
+        rSettings.tempset[i] = Number(prText);
+    }
+
+// Функция применения настроек
+    function saveSett() {
+      var strJ = rSettings;
+      var strD = JSON.stringify(strJ);
+      var fData = new FormData();
+      var myBlob = new Blob([strD], {
+        type: "plain/text"
+      });
+      fData.append("file", myBlob, "settings.json");
+      var oReq = new XMLHttpRequest();
+      oReq.open("POST", "/edit.html", true);
+      oReq.send(fData);
+    }
+
+// Функция создания радиальной шкалы
+    function createRadGauge(id, minVal, maxVal, unit) {
+      function polarToCartesian(centerX, centerY, radius, rad) {
+        return {
+          x: centerX + (radius * Math.cos(rad)),
+          y: centerY + (radius * Math.sin(rad))
+        };
+      }
+
+      function arc(x, y, radius, val, minVal, maxVal) {
+        var start = polarToCartesian(x, y, radius, -Math.PI);
+        var end = polarToCartesian(x, y, radius, -Math.PI * (1 - 1 / (maxVal - minVal) * (val - minVal)));
+
+        var d = [
+          "M", start.x, start.y,
+          "A", radius, radius, 0, 0, 1, end.x, end.y
+        ].join(" ");
+
+        return d;
+      }
+
+      var tmpl =
+        '<svg class="rGauge" viewBox="0 0 200 145">' +
+        '<path class="rGauge-base" id="' + id + '_base" stroke-width="30" />' +
+        '<path class="rGauge-progress" id="' + id + '_progress" stroke-width="30" stroke="#1565c0" />' +
+        '<text class="rGauge-val" id="' + id + '_val" x="100" y="95" text-anchor="middle"></text>' +
+        '<text class="rGauge-min-val" id="' + id + '_minVal" x="40" y="125" text-anchor="middle"></text>' +
+        '<text class="rGauge-max-val" id="' + id + '_maxVal" x="160" y="125" text-anchor="middle"></text>' +
+        '</svg>';
+
+      document.getElementById(id).innerHTML = tmpl;
+      document.getElementById(id + '_base').setAttribute("d", arc(100, 100, 60, 1, 0, 1));
+      document.getElementById(id + '_progress').setAttribute("d", arc(100, 100, 60, minVal, minVal, maxVal));
+      document.getElementById(id + '_minVal').textContent = minVal;
+      document.getElementById(id + '_maxVal').textContent = maxVal;
+
+      var gauge = {
+        setVal: function (val) {
+          val = Math.max(minVal, Math.min(val, maxVal));
+          document.getElementById(id + '_progress').setAttribute("d", arc(100, 100, 60, val, minVal, maxVal));
+          document.getElementById(id + '_val').textContent = val + (unit !== undefined ? unit : '');
+          return gauge;
+        },
+        setColor: function (color) {
+          document.getElementById(id + '_progress').setAttribute("stroke", color);
+          return gauge;
+        }
+      }
+
+      return gauge;
+    }
+
+// Функция создания вертикальной шкалы
+    function createVerGauge(id, minVal, maxVal, unit) {
+      var tmpl =
+        '<svg class="vGauge" viewBox="0 0 145 145">' +
+        '<rect class="vGauge-base" id="' + id + '_base" x="30" y="25" width="30" height="100"></rect>' +
+        '<rect class="vGauge-progress" id="' + id +
+        '_progress" x="30" y="25" width="30" height="0" fill="#1565c0"></rect>' +
+        '<text class="vGauge-val" id="' + id + '_val" x="70" y="80" text-anchor="start"></text>' +
+        '<text class="vGauge-min-val" id="' + id + '_minVal" x="70" y="125"></text>' +
+        '<text class="vGauge-max-val" id="' + id + '_maxVal" x="70" y="30" text-anchor="start"></text>' +
+        '</svg>';
+
+      document.getElementById(id).innerHTML = tmpl;
+      document.getElementById(id + '_minVal').textContent = minVal;
+      document.getElementById(id + '_maxVal').textContent = maxVal;
+
+      var gauge = {
+        setVal: function (val) {
+          val = Math.max(minVal, Math.min(val, maxVal));
+          var height = 100 / (maxVal - minVal) * (val - minVal);
+          document.getElementById(id + '_progress').setAttribute("height", height);
+          document.getElementById(id + '_progress').setAttribute("y", 25 + (100 - height));
+          document.getElementById(id + '_val').textContent = val + (unit !== undefined ? unit : '');
+          return gauge;
+        },
+        setColor: function (color) {
+          document.getElementById(id + '_progress').setAttribute("fill", color);
+          return gauge;
+        }
+      }
+
+      return gauge;
+    }
+  </script>
+</body>
+
+</html>

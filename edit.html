@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Загрузка и обновление файлов</title>
+    <link href='main.css' rel='stylesheet' type='text/css'>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="144x144"  href="favicon-144x144.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="favicon.ico">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00878f">
+    <meta charset="utf-8"/>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'>
+</head>
+<style type="text/css">
+.dropzone{
+	width: 300px;
+	height: 300px;
+	border: 2px dashed #9f0;
+	color: #9f0;
+	line-height: 150px;
+	text-align: center;
+	border-radius: 5px;
+}
+
+.dropzone.dragover{
+	border-color: #000;
+	color: #000; 
+}
+
+.ico{ padding-left: 38%; width: 50px; height: 50px;}
+
+
+.example-1 .form-group{padding:1em;margin:1em}
+.example-1 input[type=file]{outline:0;opacity:0;pointer-events:none;user-select:none}
+.example-1 .label{height: 195px; border:2px dashed #fff;border-radius:5px;display:block;padding:1.2em;transition:border 300ms ease;cursor:pointer;text-align:center}
+.example-1 .label i{display:block;font-size:42px;padding-bottom:16px}
+.example-1 .label i,.example-1 .label .title{color:#fff;transition:200ms color}
+.example-1 .label:hover{border:2px solid #000}
+.example-1 .label:hover i,.example-1 .label:hover .title{color:#000}
+
+.div_block{
+	    background: #fff;
+    	padding: 10px;
+    	width: 50%;
+    	border-radius: 2px;
+}
+</style>
+<body>
+	<ul>
+  <li><a href="./index.html">Главная</a></li>
+  <li><a href="./control.html">Управление независимыми контурами</a></li>
+  <li><a href="./hw.html">ГВС</a></li>
+  <li><a href="./hand.html">Сервисное меню</a></li>
+  <li><a class="active" href="./edit.html">Обновление файлов</a></li>
+</ul>
+	<center>
+        <header>
+            <h1 style="color: #fff">Обновление файлов</h1>
+        </header>
+    <center>
+        <div class="div_block">
+            <p style="text-align: center">Загрузите Ваши файлы в постоянную память устройства.
+                <br/>Для интерфейса следует использовать сжатые файлы (с расширением .gz).</p>
+        </div><br>
+
+
+        <div id="dropzone" class="dropzone">
+        	<form method="post" enctype="multipart/form-data" >
+        	<div class="example-1">
+                <div class="form-group">
+    				<label class="label">
+              <div class="ico">
+      				<svg  version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+              width="50px" height="50px" viewBox="0 0 792 792" style="enable-background:new 0 0 50 50; fill: #fff" xml:space="preserve">
+              <path d="M306,150.48v459.36c0,0-6.696,96.408,91.476,96.408C486,706.248,486,609.84,486,609.84V126.72C486,126.72,486,0,360,0
+              S234,126.72,234,126.72v483.12c0,0,0,182.16,162,182.16s162-182.16,162-182.16V126.72c0-19.8-36-19.8-36,0v483.12
+              c0,0,13.104,146.16-126,146.16c-126,0-126-146.16-126-146.16V126.72c0,0,0-90.72,90-90.72s90,90.72,90,90.72v483.12
+              c0,0,0,56.809-52.524,56.809c-52.523,0-55.476-56.809-55.476-56.809V150.48C342,130.68,306,130.68,306,150.48z"/>
+              </svg></div>
+     			 	<span id="titleFile" class="title" title="Перетащите сюда файл или выберите его в проводнике">Добавить файл</span>
+      				<input id="inpUpload" type="file" name="Выберите файл" accept=".gz,.html,.ico,.js,.css,.json,.png,.svg" hidden> <!--прячем input-->
+    				</label>
+  				</div>
+  			</div>
+         <input class="button" type="submit" value="Загрузить" name="submit">
+            </form>
+        </div>
+       
+
+
+
+	</center>
+<script>
+
+	(function(){
+
+		var dropzone = document.getElementById('dropzone'); //Зона перетаскивания
+
+		var inpUpload = document.getElementById('inpUpload'); //Надпись файла
+
+		var upload = function(file){ //Загрузка файлов
+			 //расширения
+				/*inpUpload.value = "";
+				var value = file.name;
+				document.getElementById('titleFile').title = value; //подсказка с полным именем файла
+				if(value.length>20){ //обрезание если длиное название
+					value = value.substr(0,17);
+					value= value+"...";
+				} 
+			document.getElementById('titleFile').innerHTML=value;*/
+      var formData = new FormData(), xhr = new XMLHttpRequest(), i;
+
+      for (i=0; i<file.length; i++){
+        if (file[i].type.match('text.html|image.png|image.x-icon|application.json|application/x-gzip|text/css|text/javascript|image/svg+xml')){
+        formData.append('file[]',file[i]); // закидываем в дату
+        }
+      }
+      
+      xhr.open("POST", "/edit.html", true);
+      xhr.onreadystatechange = function () {
+      if(xhr.readyState === 4 && xhr.status === 200) {
+      alert("The upload was successful.")
+  }
+};
+      xhr.send(formData);
+		}
+
+		dropzone.ondrop = function(e){ //При отпускании
+			e.preventDefault();
+			this.className = 'dropzone';
+			upload(e.dataTransfer.files);
+		};
+
+		dropzone.ondragover = function(){ //При наведении с файлами
+			this.className = 'dropzone dragover';
+			return false;
+		};
+
+		dropzone.ondragleave = function(){ //При выходе из зоны
+			this.className = 'dropzone';
+			return false;
+		};
+
+
+		inpUpload.onchange = function(){ //При выборе файла
+			var value = inpUpload.files[0].name;
+			document.getElementById('titleFile').title = value; //подсказка с полным именем файла
+			if(value.length>20){ //обрезание если длиное название
+				value = value.substr(0,17);
+				value= value+"...";
+			} 
+			document.getElementById('titleFile').innerHTML=value;
+		}
+
+
+	}());
+
+	
+</script>
+
+</body>
+</html>

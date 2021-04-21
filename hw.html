@@ -1,0 +1,232 @@
+﻿<DOCTYPE html>
+<html>
+
+<head>
+  <title>Hot Water VOLNA2.0</title>
+  <link rel="stylesheet" type="text/css" href="hw.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="144x144" href="favicon-144x144.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="favicon.ico">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#001b4c">
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+</head>
+
+<body>
+	<ul>
+<li><a href="./index.html">Главная</a></li>
+  <li><a href="./control.html">Управление независимыми контурами</a></li>
+  <li><a class="active" href="./hw.html">ГВС</a></li>
+  <li><a href="./hand.html">Сервисное меню</a></li>
+</ul>
+  <section class="control">
+  	<div class="block" style="width:308px">
+  		<header class="header">
+  		<div class="title_name" name="name" id="name1" value="ГВС" maxlength="15" tabindex="-1" >Горячая вода</div>
+  		</header>
+  		<div class="main_control">
+  		 <div class="simple">Температура ГВС:<span id="t5c">0</span> <sup>o</sup>C</div><br>
+  		 <input type="number" step="1" min="0" max="100" value="50" id="input5" name="points" tabindex="1" onwheel="MoveEdit(this,event)" onkeyup="isright(this)" onclick="this.select()" oninput="changed_inp(this)">
+  		 </div>
+  		 <div class="slider1">
+    		<input type="range" id="slider5" class="slider_vertical" min="0" max="100" tabindex="-1" oninput="changed_slider(this)" />
+  		</div>
+      <div class="status">
+      Канал открытия: <span id="vlv4"> [..]</span>
+      </div>
+		<div class="status">
+  		Канал закрытия: <span id="vlv5"> [..]</span>
+  		</div>
+  	</div>
+  </section>
+
+<section class="control">
+  <div class="floor_block">
+    <h3>Управление</h3>
+    <div class="menu">Гистерезис (точность):</div>
+    <div class="main"><input type="number" style="height:20px" id="dTemp" name="td5" min="0" max="10" step="0.1" tabindex="-1" oninput="onn();"></div>
+    <div class="right"><sup>o</sup>C</div>
+    <div class="menu">Время удержания:</div>
+    <div class="main"><input type="number" style="height:20px" id="sendTime" name="thold" min="0" max="1000000" step="1" tabindex="-1" oninput="onn();"></div>
+    <div class="right">мс</div>
+    <br><br><br><div class="menu">Управлять ГВС?</div>
+    <div class="main">
+		<label class="switch">
+		<input id="hwchb" type="checkbox" oninput="onn();">
+		<span class="slider round"></span>
+		</label>
+	</div>
+    <div class="right"></div>
+
+    <br>
+    <br>
+    <div class="wrapper">
+		<div class="left_block"><h3 id="response_string" style="padding:4.5px">...</h3></div>
+		<div class="right_block"><button id="Save_Btn" class="button" onclick="Save_Sett();" tabindex="7">Сохранить</button></div>
+	</div>
+</section>
+
+
+  <script>
+    var ejson;
+    var connection = new WebSocket('ws://' + location.hostname + ':81/', ['arduino']);
+      connection.onopen = function () {
+        connection.send('Connect ' + new Date());
+      };
+      connection.onerror = function (error) {
+        console.log('WebSocket Error ', error);
+      };
+      connection.onmessage = function (e) {
+        console.log('Server: ', e.data);
+        ejson = JSON.parse(e.data);
+
+        vl.getElementById("t5c").innerHTML = ejson.t5c;
+        vl.getElementById("vlv4").innerHTML = onoff(ejson.vlv4);
+        vl.getElementById("vlv5").innerHTML = onoff(ejson.vlv5);
+        vl.getElementById("vlv4").style.color = setColor(ejson.vlv4);
+        vl.getElementById("vlv5").style.color = setColor(ejson.vlv5);
+      };
+      connection.onclose = function () {
+        console.log('WebSocket connection closed');
+      };
+
+    var rSettings;
+    var vl = document;
+    vl.onload = hel();
+
+// Базовая функция при старте
+    function hel() {
+
+      var requestURL = '/settings.json';
+      var request = new XMLHttpRequest();
+      request.open('GET', requestURL);
+      request.responseType = 'json';
+      request.send();
+      request.onload = function () {
+        rSettings = request.response;
+        	vl.getElementById("input5").value = rSettings.elParam[0];
+        	vl.getElementById("slider5").value = rSettings.elParam[0];
+        	vl.getElementById("sendTime").value = rSettings.elParam[8];
+        	vl.getElementById("dTemp").value = rSettings.elParam[3];
+        	if (rSettings.elParam[1] == 0) {vl.getElementById("hwchb").checked = false}
+        	else {vl.getElementById("hwchb").checked = true}
+
+      }
+    }
+
+// Функция красивого отображения вкл/выкл
+    function onoff(valueonoff) {
+      var retText = "";
+      if (valueonoff == 0) {
+        retText = " [ВЫКЛ]";
+      } else {
+        retText = " [ВКЛ]";
+      }
+      return retText;
+    }
+
+    function setColor(valueColor) {
+      var retColor = "";
+      if (valueColor == 0) {retColor = "#b31919";}
+      else {retColor = "#0fbd3b";}
+      return retColor;
+    }
+
+// Функция смены режима
+    function hModeSwitch() {
+      if (ejson.hMode == 0) {
+        connection.send("&hMode=1");
+        console.log("&hMode=1");
+      } else {
+        connection.send("&hMode=0");
+        console.log("&hMode=0");
+      }
+    }
+
+
+////////////////////////////Scroll Func//////////////////////////////////////////////
+ var scroll=-2;
+
+function MoveEdit(obj,event)
+	{
+    var delta = event.deltaY;
+    if(obj.value>-1 && obj.value<101)
+    	if(scroll>=0 && scroll<=1){
+    		scroll = +scroll + delta/100;
+    	}
+    	else{
+    		scroll=0;
+    		obj.value= +obj.value+1;
+    		vl.getElementById("slider"+obj.id.slice(-1)).value=obj.value;
+    		vl.getElementById("response_string").innerHTML = "Настройки изменены";
+    	}
+    	////////////////////////////////////////////////
+    	    	if(scroll>=-1 && scroll<=0){
+    		scroll = +scroll + delta/100;
+    	}
+    	else{
+    		scroll=0;
+    		obj.value= +obj.value-1;
+    		vl.getElementById("slider"+obj.id.slice(-1)).value=obj.value;
+    		vl.getElementById("response_string").innerHTML = "Настройки изменены";
+    	}
+    	if(scroll==-2){scroll=0; obj.value= +obj.value+1; vl.getElementById("slider"+obj.id.slice(-1)).value=obj.value;} //я хз как это работает, но оно работает, 3 часа потрачены не зря
+    //////////////////////////////////////////////////
+    if(obj.value<0) obj.value =0;
+    if(obj.value>100) obj.value =100;
+    if (event.preventDefault) event.preventDefault();
+    event.returnValue = false;
+	}
+	/////////////////////////////////////////////////////////////////////
+	function isright(obj)
+{
+  if(obj.value<0) obj.value =0;
+  if(obj.value>100) obj.value =100;
+}
+	///////////////////Changed Functions//////////////////////////////////////////
+	function changed_inp(obj){
+		vl.getElementById("slider"+obj.id.slice(-1)).value=obj.value;
+		vl.getElementById("response_string").innerHTML = "Настройки изменены";
+	}
+
+	function changed_slider(obj){
+		vl.getElementById("input"+obj.id.slice(-1)).value=obj.value;
+		vl.getElementById("response_string").innerHTML = "Настройки изменены";
+	}
+
+	function changed_name(){
+		vl.getElementById("response_string").innerHTML = "Настройки изменены";
+	}
+
+	function onn(){
+		vl.getElementById("response_string").innerHTML = "Настройки изменены";}
+//////////////////////////////////////////End of Scroll Func////////////////////////////////////////////////////////////
+
+////////////////////////////////////////Save Settings////////////////////////////
+
+	function Save_Sett(){
+    rSettings.elParam[0] = Number(vl.getElementById("input5").value);
+		rSettings.elParam[1] = Number(vl.getElementById("hwchb").checked);
+		console.log(Number(vl.getElementById("hwchb").checked));
+		rSettings.elParam[3] = Number(vl.getElementById("dTemp").value);
+		rSettings.elParam[8] = Number(vl.getElementById("sendTime").value);
+		var strJ = rSettings;
+      	var strD = JSON.stringify(strJ);
+      	var fData = new FormData();
+      	var myBlob = new Blob([strD], {
+        	type: "plain/text"
+      	});
+      	fData.append("file", myBlob, "settings.json");
+      	var oReq = new XMLHttpRequest();
+      	oReq.open("POST", "/edit.html", true);
+      	oReq.onreadystatechange = function () {
+			if(oReq.readyState === 4 && oReq.status === 200) {
+				vl.getElementById("response_string").innerHTML= "Настройки сохранены";
+			}
+		}
+      	oReq.send(fData);
+	}
+  </script>
+</body>
+</html>
