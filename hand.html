@@ -265,7 +265,7 @@
     var vl = document;
     vl.onload = hel();
     var ejson;
-    var connection = new WebSocket('ws://' + location.hostname + ':81/', ['arduino']);
+    var connection = new WebSocket('ws://localhost:1000');
     connection.onopen = function () {
         connection.send('Connect ' + new Date());
     };
@@ -275,7 +275,7 @@
     connection.onmessage = function (e) {
         console.log('Server: ', e.data);
         _("mainStringContent").innerHTML = e.data;
-        ejson = JSON.parse(e.data);
+       let  ejson = JSON.parse(e.data);
 		_("hmchb").checked = Number(ejson.hMode);
 		_("k1chb").checked = Number(ejson.vlv1);
 		_("k2chb").checked = Number(ejson.vlv2);
@@ -297,9 +297,9 @@
     };
 	connection.onclose = function () {
         console.log('WebSocket connection closed');
-        connection = new WebSocket('ws://' + location.hostname + ':81/', ['arduino']);
+        
     };
-
+  
 // Базовая функция при старте
 
     function hel() {
