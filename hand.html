@@ -137,7 +137,7 @@
         <div class="menu">Управлять отоплением?</div>
             <div class="main">
         		<label class="switch">
-        		<input id="ep2" type="checkbox"  onclick="epresp(this);">
+        		<input id="option0SecondColumn" type="checkbox"  onclick="CheckThesecondColumn(this)">
         		<span class="slider round"></span>
         		</label>
         	</div>
@@ -145,7 +145,7 @@
         <div class="menu">Управлять горячей водой?</div>
             <div class="main">
         		<label class="switch">
-        		<input id="ep1" type="checkbox"  onclick="epresp(this);">
+        		<input id="option1SecondColumn" type="checkbox"  onclick="CheckThesecondColumn(this)">
         		<span class="slider round"></span>
         		</label>
         	</div>
@@ -153,7 +153,7 @@
         <div class="menu">Продолжительный ручной режим</div>
             <div class="main">
         		<label class="switch">
-        		<input id="ep6" type="checkbox"  onclick="epresp(this);">
+        		<input id="option2SecondColumn" type="checkbox"  onclick="CheckThesecondColumn(this)">
         		<span class="slider round"></span>
         		</label>
         	</div>
@@ -161,7 +161,7 @@
         <div class="menu">Ежечасное обновление теплоносителя</div>
             <div class="main">
         		<label class="switch">
-        		<input id="ep7" type="checkbox"  onclick="epresp(this);">
+        		<input id="option3SecondColumn" type="checkbox"  onclick="CheckThesecondColumn(this)">
         		<span class="slider round"></span>
         		</label>
         	</div>
@@ -184,13 +184,13 @@
         <div class="main"><input type="number" class="rounded" step="0.1" id="ts7" oninput="epresp(this)"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">Точность температуры отопления:</div>
-        <div class="main"><input type="number" class="rounded" step="0.1" id="ep4" oninput="epresp(this);"></div>
+        <div class="main"><input type="number" class="rounded" step="0.1" id="ep1" oninput="epresp(this);"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">Точность температуры ГВС:</div>
-        <div class="main"><input type="number" class="rounded" step="0.1" id="ep3" oninput="epresp(this);"></div>
+        <div class="main"><input type="number" class="rounded" step="0.1" id="ep2" oninput="epresp(this);"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">Установленная температура ГВС:</div>
-        <div class="main"><input type="number" class="rounded" step="1" id="ep0" oninput="epresp(this);"></div>
+        <div class="main"><input type="number" class="rounded" step="1" id="ep3" oninput="epresp(this);"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">Установленная температура "Комфорта":</div>
         <div class="main"><input type="number" class="rounded" step="1" id="ts0" oninput="epresp(this)"></div>
@@ -232,25 +232,25 @@
         <div class="main"><input type="number" class="rounded" step="1" id="ts13" oninput="epresp(this)"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">Длительность управляющего импульса ИМ отопления:</div>
-        <div class="main"><input type="number" class="rounded" step="100" id="ep9" oninput="epresp(this);"></div>
+        <div class="main"><input type="number" class="rounded" step="100" id="ep4" oninput="epresp(this);"></div>
         <div class="right">мс</div>
         <div class="menu">Длительность управляющего импульса ИМ ГВС:</div>
-        <div class="main"><input type="number" class="rounded" step="100" id="ep8" oninput="epresp(this);"></div>
+        <div class="main"><input type="number" class="rounded" step="100" id="ep5" oninput="epresp(this);"></div>
         <div class="right">мс</div>
         <div class="menu">Вес импульса расходомера:</div>
-        <div class="main"><input type="number" class="rounded" step="0.00001" id="ep5" oninput="epresp(this);"></div>
+        <div class="main"><input type="number" class="rounded" step="0.00001" id="ep6" oninput="epresp(this);"></div>
         <div class="right">м<sup>3</sup></div>
         <div class="menu">Стоимость 1 Гкал тепловой энергии:</div>
-        <div class="main"><input type="number" class="rounded" step="1" id="ep11" oninput="epresp(this);"></div>
+        <div class="main"><input type="number" class="rounded" step="1" id="ep7" oninput="epresp(this);"></div>
         <div class="right">тенге</div>
         <div class="menu">Удельное потребление тепловой энергии:</div>
-        <div class="main"><input type="number" class="rounded" step="0.00001" id="ep12" oninput="epresp(this);"></div>
+        <div class="main"><input type="number" class="rounded" step="0.00001" id="ep8" oninput="epresp(this);"></div>
         <div class="right">Гкал/(<sup>о</sup>С*час)</div>
         <div class="menu">Базовая температура в помещении:</div>
-        <div class="main"><input type="number" class="rounded" step="1" id="ep13" oninput="epresp(this);"></div>
+        <div class="main"><input type="number" class="rounded" step="1" id="ep9" oninput="epresp(this);"></div>
         <div class="right"><sup>о</sup>С</div>
         <div class="menu">Удельный выброс СО2 котельной:</div>
-        <div class="main"><input type="number" class="rounded" step="1" id="ep14" oninput="epresp(this);"></div>
+        <div class="main"><input type="number" class="rounded" step="1" id="ep10" oninput="epresp(this);"></div>
         <div class="right">кг/Гкал</div>
         <div class="right_block"><button id="finalsave1" class="button" onclick="saveSett();">Применить</button></div>
 		  </footer>
@@ -262,9 +262,7 @@
 
   let rSettings={chanels:[true,false,true,false,true,false]}
     var vl = document;
-    vl.onload = hel();
-    var ejson;
-    var connection = new WebSocket('ws://localhost:1000');
+    let connection = new WebSocket('ws://localhost:1000')
     connection.onerror = function (error) {
         console.log('WebSocket Error ', error);
     };
@@ -295,6 +293,16 @@
         var Qual = 0;
         if(Number(checkFromServer.sQual)>90){Qual = 0}else{Qual = Number(checkFromServer.sQual).toFixed(0)/32*100};
         _("sQual").innerHTML = Qual;
+
+        //третья колонка 
+        //заполняю ts & ep 
+        for(let i=0 ;i<=15;i++)        {
+           _("ts"+i).value=10
+        }
+        for(let i=1 ;i<=10;i++)        {
+           _("ep"+i).value=20
+        }
+      
     };
 	connection.onclose = function () {
         console.log('WebSocket connection closed');
@@ -302,41 +310,7 @@
   
 // Базовая функция при старте
 
-    function hel() {
-		
-      
-      _("ts0").value = 50;
-      _("ts1").value = 500;
-      _("ts2").value = rSettings.tempset[2];
-      _("ts3").value = rSettings.tempset[3];
-      _("ts4").value = rSettings.tempset[4];
-      _("ts5").value = rSettings.tempset[5];
-      _("ts6").value = rSettings.tempset[6];
-      _("ts7").value = rSettings.tempset[7];
-      _("ts8").value = rSettings.tempset[8];
-      _("ts9").value = rSettings.tempset[9];
-      _("ts10").value = rSettings.tempset[10];
-      _("ts11").value = rSettings.tempset[11];
-      _("ts12").value = rSettings.tempset[12];
-      _("ts13").value = rSettings.tempset[13];
-      _("ts14").value = rSettings.tempset[14];
-      _("ts15").value = rSettings.tempset[15];
-			_("ep0").value = rSettings.elParam[0];
-      _("ep1").checked = rSettings.elParam[1];
-      _("ep2").checked = rSettings.elParam[2];
-      _("ep3").value = rSettings.elParam[3];
-      _("ep4").value = rSettings.elParam[4];
-      _("ep5").value = rSettings.elParam[5];
-      _("ep6").checked = rSettings.elParam[6];
-      _("ep7").checked = rSettings.elParam[7];
-      _("ep8").value = rSettings.elParam[8];
-      _("ep9").value = rSettings.elParam[9];
-      _("ep11").value = rSettings.elParam[11];
-      _("ep12").value = rSettings.elParam[12];
-      _("ep13").value = rSettings.elParam[13];
-      _("ep14").value = rSettings.elParam[14];
-      
-    }
+
 
 // Функция отправки команд к контроллеру
     function commandSend() {
@@ -361,13 +335,14 @@
     }
    
     function epresp(full){
-      //создаю из айдишника ключ в средней колонке 
+      //создаю из айдишника ключ в средней колонке       
       
-      if(full.type==='number'){
           rSettings={...rSettings,...{[full.id]:full.value}}
-      }else{
-        rSettings={...rSettings,...{[full.id]:full.checked}}
-      }
+      
+    
+    }
+    function CheckThesecondColumn(full) {
+      rSettings={...rSettings,...{[full.id]:full.checked}}
     }
 
     // Функция применения настроек
