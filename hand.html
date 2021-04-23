@@ -116,19 +116,19 @@
         <div class="wrapper"><h3>Тип системы отопления</h3></div>
         <div class="menu">
         <label class="container-r">Многоканальная с э/м клапанами
-          <input type="radio" checked="checked" name="htype" id="type0" onchange="fun2();">
+          <input type="radio" checked="checked" name="htype" id="type0" onchange="fun2(0);">
           <span class="checkmark-r"></span>
         </label>
         <label class="container-r">Многоканальная плавного открытия
-          <input type="radio" name="htype" id="type1" onchange="fun2();">
+          <input type="radio" name="htype" id="type1" onchange="fun2(1);">
           <span class="checkmark-r"></span>
         </label>
         <label class="container-r">Независимые контуры с фиксированной температурой
-          <input type="radio" name="htype" id="type2" onchange="fun2();">
+          <input type="radio" name="htype" id="type2" onchange="fun2(2);">
           <span class="checkmark-r"></span>
         </label>
         <label class="container-r">Независимые контуры с расписанием*
-          <input type="radio" name="htype" id="type3" onchange="fun2();">
+          <input type="radio" name="htype" id="type3" onchange="fun2(3);">
           <span class="checkmark-r"></span>
         </label>
         </div>
@@ -175,13 +175,13 @@
       </header>
       <footer id="mS">
         <div class="menu">Корректировка датчика t1:</div>
-        <div class="main"><input type="number" class="rounded" step="0.1" id="ts14" oninput="tsrespond(this.value, this.id);"></div>
+        <div class="main"><input type="number" class="rounded" step="0.1" id="ts14" oninput="epresp(this)"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">Корректировка датчика t2:</div>
-        <div class="main"><input type="number" class="rounded" step="0.1" id="ts15" oninput="tsrespond(this.value, this.id);"></div>
+        <div class="main"><input type="number" class="rounded" step="0.1" id="ts15" oninput="epresp(this)"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">Корректировка датчика t3:</div>
-        <div class="main"><input type="number" class="rounded" step="0.1" id="ts7" oninput="tsrespond(this.value, this.id);"></div>
+        <div class="main"><input type="number" class="rounded" step="0.1" id="ts7" oninput="epresp(this)"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">Точность температуры отопления:</div>
         <div class="main"><input type="number" class="rounded" step="0.1" id="ep4" oninput="epresp(this);"></div>
@@ -193,43 +193,43 @@
         <div class="main"><input type="number" class="rounded" step="1" id="ep0" oninput="epresp(this);"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">Установленная температура "Комфорта":</div>
-        <div class="main"><input type="number" class="rounded" step="1" id="ts0" oninput="tsrespond(this.value, this.id);"></div>
+        <div class="main"><input type="number" class="rounded" step="1" id="ts0" oninput="epresp(this)"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">График отопления т.1 t1:</div>
-        <div class="main"><input type="number" class="rounded" step="1" id="ts1" oninput="tsrespond(this.value, this.id);"></div>
+        <div class="main"><input type="number" class="rounded" step="1" id="ts1" oninput="epresp(this)"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">График отопления т.1 t2:</div>
-        <div class="main"><input type="number" class="rounded" step="1" id="ts2" oninput="tsrespond(this.value, this.id);"></div>
+        <div class="main"><input type="number" class="rounded" step="1" id="ts2" oninput="epresp(this)"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">График отопления т.1 t3:</div>
-        <div class="main"><input type="number" class="rounded" step="1" id="ts3" oninput="tsrespond(this.value, this.id);"></div>
+        <div class="main"><input type="number" class="rounded" step="1" id="ts3" oninput="epresp(this)"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">График отопления т.2 t1:</div>
-        <div class="main"><input type="number" class="rounded" step="1" id="ts4" oninput="tsrespond(this.value, this.id);"></div>
+        <div class="main"><input type="number" class="rounded" step="1" id="ts4" oninput="epresp(this)"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">График отопления т.2 t2:</div>
-        <div class="main"><input type="number" class="rounded" step="1" id="ts5" oninput="tsrespond(this.value, this.id);"></div>
+        <div class="main"><input type="number" class="rounded" step="1" id="ts5" oninput="epresp(this)"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">График отопления т.2 t3:</div>
-        <div class="main"><input type="number" class="rounded" step="1" id="ts6" oninput="tsrespond(this.value, this.id);"></div>
+        <div class="main"><input type="number" class="rounded" step="1" id="ts6" oninput="epresp(this)"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">Температура контура 1:</div>
-        <div class="main"><input type="number" class="rounded" step="1" id="ts8" oninput="tsrespond(this.value, this.id);"></div>
+        <div class="main"><input type="number" class="rounded" step="1" id="ts8" oninput="epresp(this)"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">Температура контура 2:</div>
-        <div class="main"><input type="number" class="rounded" step="1" id="ts9" oninput="tsrespond(this.value, this.id);"></div>
+        <div class="main"><input type="number" class="rounded" step="1" id="ts9" oninput="epresp(this)"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">Температура контура 3:</div>
-        <div class="main"><input type="number" class="rounded" step="1" id="ts10" oninput="tsrespond(this.value, this.id);"></div>
+        <div class="main"><input type="number" class="rounded" step="1" id="ts10" oninput="epresp(this)"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">Температура контура 4:</div>
-        <div class="main"><input type="number" class="rounded" step="1" id="ts11" oninput="tsrespond(this.value, this.id);"></div>
+        <div class="main"><input type="number" class="rounded" step="1" id="ts11" oninput="epresp(this)"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">Температура контура 5:</div>
-        <div class="main"><input type="number" class="rounded" step="1" id="ts12" oninput="tsrespond(this.value, this.id);"></div>
+        <div class="main"><input type="number" class="rounded" step="1" id="ts12" oninput="epresp(this)"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">Температура контура 6:</div>
-        <div class="main"><input type="number" class="rounded" step="1" id="ts13" oninput="tsrespond(this.value, this.id);"></div>
+        <div class="main"><input type="number" class="rounded" step="1" id="ts13" oninput="epresp(this)"></div>
         <div class="right"><sup>o</sup>C</div>
         <div class="menu">Длительность управляющего импульса ИМ отопления:</div>
         <div class="main"><input type="number" class="rounded" step="100" id="ep9" oninput="epresp(this);"></div>
@@ -265,56 +265,48 @@
     vl.onload = hel();
     var ejson;
     var connection = new WebSocket('ws://localhost:1000');
-    
     connection.onerror = function (error) {
         console.log('WebSocket Error ', error);
     };
     connection.onmessage = function (e) {
       
       let checkFromServer=(JSON.parse(e.data));
-      console.log(checkFromServer)
-      
-
+      rSettings= checkFromServer;
 		//_("hmchb").checked = Number(ejson.hMode);
 
-
-		_("k1chb").checked = checkFromServer.chanels[0];
-		_("k2chb").checked =  checkFromServer.chanels[1];
-		_("k3chb").checked =  checkFromServer.chanels[2];
-		_("k4chb").checked =  checkFromServer.chanels[3];
-		_("k5chb").checked =  checkFromServer.chanels[4];
-		_("k6chb").checked =  checkFromServer.chanels[5];
-
+//чекбоксы в левом столбике
+		_("k1chb").checked = checkFromServer.chanels[0].isOpen;
+		_("k2chb").checked =  checkFromServer.chanels[1].isOpen;
+		_("k3chb").checked =  checkFromServer.chanels[2].isOpen;
+		_("k4chb").checked =  checkFromServer.chanels[3].isOpen;
+		_("k5chb").checked =  checkFromServer.chanels[4].isOpen;
+		_("k6chb").checked =  checkFromServer.chanels[5].isOpen;
+//тип режима в левом столбике
         _("tRTC").innerHTML = checkFromServer.tRTC;
-        /*
-        _("t1c").innerHTML = ejson.t1c;
-        _("t2c").innerHTML = ejson.t2c;
-        _("t3c").innerHTML = ejson.t3c;
-        _("t4c").innerHTML = ejson.t4c;
-        _("t5c").innerHTML = ejson.t5c;
-        _("t6c").innerHTML = ejson.t6c;*/
+
+//температура в левом столбике
+        _("t1c").innerHTML = checkFromServer.chanels[0].temperature;
+        _("t2c").innerHTML = checkFromServer.chanels[1].temperature
+        _("t3c").innerHTML = checkFromServer.chanels[2].temperature
+        _("t4c").innerHTML = checkFromServer.chanels[3].temperature
+        _("t5c").innerHTML = checkFromServer.chanels[4].temperature
+        _("t6c").innerHTML = checkFromServer.chanels[5].temperature
+        //качество сети
         var Qual = 0;
         if(Number(checkFromServer.sQual)>90){Qual = 0}else{Qual = Number(checkFromServer.sQual).toFixed(0)/32*100};
         _("sQual").innerHTML = Qual;
     };
 	connection.onclose = function () {
         console.log('WebSocket connection closed');
-        
     };
   
 // Базовая функция при старте
 
     function hel() {
-		var requestURL = '/settings.json';
-		var request = new XMLHttpRequest();
-		request.open('GET', requestURL);
-		request.responseType = 'json';
-		request.send();
-		request.onload = function () {
-			rSettings = request.response;
-      fun1();
-      _("ts0").value = rSettings.tempset[0];
-      _("ts1").value = rSettings.tempset[1];
+		
+      
+      _("ts0").value = 50;
+      _("ts1").value = 500;
       _("ts2").value = rSettings.tempset[2];
       _("ts3").value = rSettings.tempset[3];
       _("ts4").value = rSettings.tempset[4];
@@ -339,12 +331,11 @@
       _("ep7").checked = rSettings.elParam[7];
       _("ep8").value = rSettings.elParam[8];
       _("ep9").value = rSettings.elParam[9];
-
       _("ep11").value = rSettings.elParam[11];
       _("ep12").value = rSettings.elParam[12];
       _("ep13").value = rSettings.elParam[13];
       _("ep14").value = rSettings.elParam[14];
-      }
+      
     }
 
 // Функция отправки команд к контроллеру
@@ -362,71 +353,27 @@
 // Функция активации канала
     function vlSwitch(nvlv) {
       console.log(nvlv-1)
-      rSettings.chanels[nvlv-1]=_('k'+nvlv+'chb').checked;
+      rSettings.chanels[nvlv-1].isOpen=_('k'+nvlv+'chb').checked;
     }
 // Handle heating type
-    function fun1() { //Set from json
-    var rad=vl.getElementsByName('htype');
-    var tmppar = Number(rSettings.elParam[10]);
-      for (var i=0;i<rad.length; i++) {
-          if(i != tmppar) {
-            rad[i].checked = false;
-          }
-          else{
-            rad[i].checked = true;
-          }
-      }
+    function fun2(typeOfHeating) { // Change in json
+        connection.send(JSON.stringify({typeOfHeating:typeOfHeating}))
     }
-    function fun2() { // Change in json
-      console.log(rad.length)
-      var rad=vl.getElementsByName('htype');
-        for (var i=0;i<rad.length; i++) {
-          if(rad[i].checked){
-            rSettings.elParam[10]=Number(i);
-            console.log("rSettings.elParam[10] = "+rSettings.elParam[10]);
-          }
-        }
-    }
-
-    // Handle tempset input
-    function tsrespond(val, id){
-      if(val.length != 0){
-        rSettings.tempset[Number(id.substring(2))] = Number(val);
-        console.log('rSettings.tempset[' + id.substring(2) + '] = ' + val);
-      } else {console.log("==");}
-    }
+   
     function epresp(full){
-        switch (full.type){
-          case "number":
-              if(full.value.length != 0){
-          rSettings.elParam[Number(full.id.substring(2))] = Number(full.value);
-          console.log('rSettings.elParam[' + full.id.substring(2) + '] = ' + full.value);
-                } else {console.log("--");}
-          break;
-          default:
-          console.log("switch failed");
-          break;
-          case "checkbox":
-          rSettings.elParam[Number(full.id.substring(2))] = Number(full.checked);
-          console.log('rSettings.elParamm[' + full.id.substring(2) + '] (chbx) = ' + Number(full.checked));
-          break;
-        }
+      //создаю из айдишника ключ в средней колонке 
+      
+      if(full.type==='number'){
+          rSettings={...rSettings,...{[full.id]:full.value}}
+      }else{
+        rSettings={...rSettings,...{[full.id]:full.checked}}
+      }
     }
 
     // Функция применения настроек
         function saveSett() {
-          var strJ = rSettings;
-          console.log(strJ);
-          var strD = JSON.stringify(strJ);
-          var fData = new FormData();
-          var myBlob = new Blob([strD], {
-            type: "plain/text"
-          });
-          fData.append("file", myBlob, "settings.json");
-          var oReq = new XMLHttpRequest();
-          oReq.open("POST", "/edit.html", true);
-          oReq.send(fData);
-          console.log("settings updated!");
+              connection.send(JSON.stringify(rSettings));
+              connection.onmessage=(msg)=>{console.log(JSON.parse(msg.data))}
         }
 
   </script>
