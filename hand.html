@@ -102,7 +102,7 @@
 <div class="menu">Диагностические сообщения:</div>
     <div class="main"></div>
 <div class="right"></div>
-<textarea rows="14" cols="50" size="1" id="mainStringContent" readonly style="width:100% padding:2px"></textarea>
+<textarea rows="14" cols="50" size="1" id="mainStringContent" readonly style="width:100%;padding:2px"></textarea>
 
 
 
@@ -258,41 +258,43 @@
   </section>
 
   <script>
-	var rSettings;
   var _ = function(id) { return document.getElementById(id); };
-  location.hostname='localhost:1000';
 
+  let rSettings={chanels:[true,false,true,false,true,false]}
     var vl = document;
     vl.onload = hel();
     var ejson;
     var connection = new WebSocket('ws://localhost:1000');
-    connection.onopen = function () {
-        connection.send('Connect ' + new Date());
-    };
+    
     connection.onerror = function (error) {
         console.log('WebSocket Error ', error);
     };
     connection.onmessage = function (e) {
-        console.log('Server: ', e.data);
-        _("mainStringContent").innerHTML = e.data;
-       let  ejson = JSON.parse(e.data);
-		_("hmchb").checked = Number(ejson.hMode);
-		_("k1chb").checked = Number(ejson.vlv1);
-		_("k2chb").checked = Number(ejson.vlv2);
-		_("k3chb").checked = Number(ejson.vlv3);
-		_("k4chb").checked = Number(ejson.vlv4);
-		_("k5chb").checked = Number(ejson.vlv5);
-		_("k6chb").checked = Number(ejson.vlv6);
+      
+      let checkFromServer=(JSON.parse(e.data));
+      console.log(checkFromServer)
+      
 
-        _("tRTC").innerHTML = ejson.tRTC;
+		//_("hmchb").checked = Number(ejson.hMode);
+
+
+		_("k1chb").checked = checkFromServer.chanels[0];
+		_("k2chb").checked =  checkFromServer.chanels[1];
+		_("k3chb").checked =  checkFromServer.chanels[2];
+		_("k4chb").checked =  checkFromServer.chanels[3];
+		_("k5chb").checked =  checkFromServer.chanels[4];
+		_("k6chb").checked =  checkFromServer.chanels[5];
+
+        _("tRTC").innerHTML = checkFromServer.tRTC;
+        /*
         _("t1c").innerHTML = ejson.t1c;
         _("t2c").innerHTML = ejson.t2c;
         _("t3c").innerHTML = ejson.t3c;
         _("t4c").innerHTML = ejson.t4c;
         _("t5c").innerHTML = ejson.t5c;
-        _("t6c").innerHTML = ejson.t6c;
+        _("t6c").innerHTML = ejson.t6c;*/
         var Qual = 0;
-        if(Number(ejson.sQual)>90){Qual = 0}else{Qual = Number(ejson.sQual).toFixed(0)/32*100};
+        if(Number(checkFromServer.sQual)>90){Qual = 0}else{Qual = Number(checkFromServer.sQual).toFixed(0)/32*100};
         _("sQual").innerHTML = Qual;
     };
 	connection.onclose = function () {
@@ -347,28 +349,20 @@
 
 // Функция отправки команд к контроллеру
     function commandSend() {
-      var lT;
       lT = _("commandSendText").value;
-      console.log(lT);
-      connection.send(lT);
-      console.log(lT);
+      console.log(rSettings);
+      connection.send(JSON.stringify(rSettings));
     }
 
 // Функция смены режима
    function hModeSwitch() {
-		connection.send("&hMode=" + Number(_("hmchb").checked));
-		console.log("&hMode=" + Number(_("hmchb").checked));
+	  	connection.send(JSON.stringify({mode:_('hmchb').checked}));
     }
 
 // Функция активации канала
     function vlSwitch(nvlv) {
-		// if(rSettings.elParam[10] == 0 || rSettings.elParam[10] == 2){
-		// 	connection.send("&hv["+nvlv+"]=" + Number(_("k"+nvlv+"chb").checked));
-		// 	console.log("&hv["+nvlv+"]=" + Number(_("k"+nvlv+"chb").checked));
-		// } else {
-			connection.send("&vl"+nvlv+"=60");
-			console.log("&vl"+nvlv+"=60");
-		// }
+      console.log(nvlv-1)
+      rSettings.chanels[nvlv-1]=_('k'+nvlv+'chb').checked;
     }
 // Handle heating type
     function fun1() { //Set from json
@@ -384,6 +378,7 @@
       }
     }
     function fun2() { // Change in json
+      console.log(rad.length)
       var rad=vl.getElementsByName('htype');
         for (var i=0;i<rad.length; i++) {
           if(rad[i].checked){
